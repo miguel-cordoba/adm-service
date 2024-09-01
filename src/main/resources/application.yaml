@@ -1,0 +1,38 @@
+### profiles(?)
+######### meta
+info:
+  app:
+    artifact: '@project.artifactId@'
+    name: '@project.name@'
+    packaging: '@project.packaging@'
+    description: '@project.description@'
+    version: '@project.version@'
+    properties:
+      java:
+        version: '@java.version@'
+
+spring:
+  security:
+    user:
+      name: admin
+      password: admin
+
+  datasource:
+    #url: jdbc:h2:file:/data/demo
+    url: jdbc:h2:mem:admservice
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+
+
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+
