@@ -1,8 +1,6 @@
 package com.miguelcordoba.admservice.api;
 
 import com.miguelcordoba.admservice.dto.DocumentDTO;
-import com.miguelcordoba.admservice.persistence.entity.Document;
-import com.miguelcordoba.admservice.service.DocumentService;
 import com.miguelcordoba.admservice.service.DocumentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/documents")
 public class DocumentController {
@@ -22,14 +21,12 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    // Get all documents
     @GetMapping
     public ResponseEntity<List<DocumentDTO>> getAllDocuments() {
         List<DocumentDTO> documents = documentService.getAllDocuments();
         return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 
-    // Get document by ID
     @GetMapping("/{id}")
     public ResponseEntity<DocumentDTO> getDocumentById(@PathVariable Long id) {
         Optional<DocumentDTO> document = documentService.getDocumentById(id);
@@ -37,14 +34,12 @@ public class DocumentController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Create a new document
     @PostMapping
     public ResponseEntity<DocumentDTO> createDocument(@RequestBody DocumentDTO documentDTO) {
         DocumentDTO savedDocument = documentService.createDocument(documentDTO);
         return new ResponseEntity<>(savedDocument, HttpStatus.CREATED);
     }
 
-    // Update a document
     @PutMapping("/{id}")
     public ResponseEntity<DocumentDTO> updateDocument(@PathVariable Long id, @RequestBody DocumentDTO documentDTO) {
         Optional<DocumentDTO> updatedDocument = documentService.updateDocument(id, documentDTO);
@@ -52,7 +47,6 @@ public class DocumentController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Delete a document
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDocument(@PathVariable Long id) {
         boolean isDeleted = documentService.deleteDocument(id);

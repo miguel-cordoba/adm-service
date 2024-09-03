@@ -1,6 +1,5 @@
 package com.miguelcordoba.admservice.persistence.entity;
 
-import com.miguelcordoba.admservice.dto.AuthorDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,13 +7,13 @@ import lombok.Getter;
 import java.util.Set;
 
 @Entity
-@Table(name="documents")
+@Table(name = "documents")
 @Getter
 @AllArgsConstructor
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;  //We use long for scalability, data volume might increase exponentially in the future
     @Column(name = "title")
     private String title;
     @Column(name = "body")
@@ -24,7 +23,7 @@ public class Document {
     @Column(name = "references")
     private String references;
 
-    public Document() {
+    public Document() { //we need both constructors for JPA and our custom entity mapping
     }
 
     public void setTitle(String title) {

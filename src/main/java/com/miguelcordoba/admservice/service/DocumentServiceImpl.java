@@ -1,9 +1,8 @@
 package com.miguelcordoba.admservice.service;
 
-import com.miguelcordoba.admservice.dto.AuthorDTO;
 import com.miguelcordoba.admservice.dto.DocumentDTO;
-import com.miguelcordoba.admservice.helper.ADMSMapper;
-import com.miguelcordoba.admservice.persistence.entity.Author;
+import com.miguelcordoba.admservice.helper.AuthorMapper;
+import com.miguelcordoba.admservice.helper.DocumentMapper;
 import com.miguelcordoba.admservice.persistence.entity.Document;
 import com.miguelcordoba.admservice.persistence.repository.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -19,6 +17,7 @@ import java.util.stream.Collectors;
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
+
     @Autowired
     public DocumentServiceImpl(DocumentRepository documentRepository, AuthorServiceImpl authorService) {
         this.documentRepository = documentRepository;
@@ -28,22 +27,22 @@ public class DocumentServiceImpl implements DocumentService {
     public List<DocumentDTO> getAllDocuments() {
         return documentRepository.findAll()
                 .stream()
-                .map(ADMSMapper::mapDocumentToDTO)
+                .map(DocumentMapper::mapToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<DocumentDTO> getDocumentById(Long id) {
-        return documentRepository.findById(id).map(ADMSMapper::mapDocumentToDTO);
+        return documentRepository.findById(id).map(DocumentMapper::mapToDTO);
     }
 
     @Override
     public DocumentDTO createDocument(DocumentDTO documentDTO) {
         // Convert DTO to entity and save
-        Document document = ADMSMapper.mapDocumentDTO2Entity(documentDTO);
+        Document document = DocumentMapper.mapToEntity(documentDTO);
         Document savedDocument = documentRepository.save(document);
         // Convert saved entity back to DTO
-        return ADMSMapper.mapDocumentToDTO(savedDocument);
+        return DocumentMapper.mapToDTO(savedDocument);
     }
 
     @Override
@@ -51,11 +50,11 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.findById(id)
                 .map(existingDoc -> {
                     existingDoc.setBody(documentDTO.body());
-                    existingDoc.setAuthors(ADMSMapper.mapAuthorsToEntity(documentDTO.authors()));
+                    existingDoc.setAuthors(AuthorMapper.mapDTOSetToEntitySet(documentDTO.authors()));
                     existingDoc.setReferences(documentDTO.references());
                     return documentRepository.save(existingDoc);
                 })
-                .map(ADMSMapper::mapDocumentToDTO); // Convert back to DTO
+                .map(DocumentMapper::mapToDTO);
     }
 
     @Override

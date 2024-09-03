@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AuthorAndDocumentManagementSystemApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AuthorAndDocumentManagementSystemApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AuthorAndDocumentManagementSystemApplication.class, args);
+    }
 
 }

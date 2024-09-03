@@ -1,7 +1,5 @@
 package com.miguelcordoba.admservice.dto;
 
-import lombok.Data;
-
 import java.util.Set;
 
 

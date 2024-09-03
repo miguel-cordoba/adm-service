@@ -1,7 +1,6 @@
 package com.miguelcordoba.admservice.service;
 
 import com.miguelcordoba.admservice.dto.DocumentDTO;
-import com.miguelcordoba.admservice.persistence.entity.Document;
 
 import java.util.List;
 import java.util.Optional;

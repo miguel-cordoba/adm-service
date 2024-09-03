@@ -1,7 +1,6 @@
 package com.miguelcordoba.admservice.service;
 
 import com.miguelcordoba.admservice.dto.AuthorDTO;
-import com.miguelcordoba.admservice.helper.ADMSMapper;
 import com.miguelcordoba.admservice.helper.AuthorMapper;
 import com.miguelcordoba.admservice.persistence.entity.Author;
 import com.miguelcordoba.admservice.persistence.repository.AuthorRepository;
@@ -24,28 +23,29 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Optional<AuthorDTO> getAuthorById(Long id) {
-        return authorRepository.findById(id).map(ADMSMapper::mapAuthorToDTO);
+        return authorRepository.findById(id).map(AuthorMapper::mapToDTO);
     }
 
     @Override
     public AuthorDTO createAuthor(AuthorDTO authorDTO) {
-        Author entityAuthor = ADMSMapper.mapAuthorDTOToEntity(authorDTO);
+        Author entityAuthor = AuthorMapper.mapToEntity(authorDTO);
         Author savedAuthor = authorRepository.save(entityAuthor);
-        return ADMSMapper.mapAuthorToDTO(savedAuthor);
+        return AuthorMapper.mapToDTO(savedAuthor);
     }
 
     @Override
-    public List<Author> getAllAuthors() {
+    public List<AuthorDTO> getAllAuthors() {
         return authorRepository.findAll().stream()
-                .map(ADMSMapper::mapAuthorsToDTO)
+                .map(AuthorMapper::mapToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Author> updateAuthor(Long id, AuthorDTO author) {
+    public Optional<AuthorDTO> updateAuthor(Long id, AuthorDTO authorDTO) {
         return authorRepository.findById(id)
                 .map(existingAuthor -> {
-                    existingAuthor.setName(author.name());
+                    existingAuthor.setFirstName(authorDTO.firstName());
+                    existingAuthor.setLastName(authorDTO.lastName());
                     return authorRepository.save(existingAuthor);
                 })
                 .map(AuthorMapper::mapToDTO);
