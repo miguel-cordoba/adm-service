@@ -5,9 +5,11 @@ import com.miguelcordoba.admservice.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/authors")
+@Validated
 public class AuthorController {
 
     private final AuthorService authorService;
@@ -45,9 +48,13 @@ public class AuthorController {
     }
 
     @Operation(summary = "Create a new author", description = "Creates a new author with the provided details")
-    @ApiResponse(responseCode = "201", description = "Author successfully created")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully updated the author"),
+            @ApiResponse(responseCode = "404", description = "Author not found"),
+            @ApiResponse(responseCode = "400", description = "Bad Request. Check input fields")
+    })
     @PostMapping
-    public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<AuthorDTO> createAuthor(@Valid @RequestBody AuthorDTO authorDTO) {
         AuthorDTO savedAuthor = authorService.createAuthor(authorDTO);
         return new ResponseEntity<>(savedAuthor, HttpStatus.CREATED);
     }
@@ -55,10 +62,11 @@ public class AuthorController {
     @Operation(summary = "Update an existing author", description = "Updates the details of an existing author by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully updated the author"),
-            @ApiResponse(responseCode = "404", description = "Author not found")
+            @ApiResponse(responseCode = "404", description = "Author not found"),
+            @ApiResponse(responseCode = "400", description = "Bad Request. Check input fields")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable Long id, @RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable Long id, @Valid @RequestBody AuthorDTO authorDTO) {
         Optional<AuthorDTO> updatedAuthor = authorService.updateAuthor(id, authorDTO);
         return updatedAuthor.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
