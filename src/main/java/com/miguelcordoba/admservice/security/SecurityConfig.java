@@ -24,9 +24,11 @@ public class SecurityConfig {
                 )
                 .httpBasic(withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                )
+                //TODO: Include CSRF Tokens in request and responses
+                .csrf().disable() // CSRF is disabled for testing purpose, which would be
+               // .csrf(csrf -> csrf
+                 //       .ignoringRequestMatchers("/h2-console/**")
+                //)
                 .headers(headers -> headers
                         .frameOptions().sameOrigin()
                 );

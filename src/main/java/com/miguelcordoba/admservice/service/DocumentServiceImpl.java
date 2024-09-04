@@ -19,7 +19,7 @@ public class DocumentServiceImpl implements DocumentService {
     private final DocumentRepository documentRepository;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository, AuthorServiceImpl authorService) {
+    public DocumentServiceImpl(DocumentRepository documentRepository) {
         this.documentRepository = documentRepository;
     }
 

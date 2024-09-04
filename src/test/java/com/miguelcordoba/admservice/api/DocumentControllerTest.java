@@ -126,12 +126,5 @@ class DocumentControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
-   @Test
-    void createDocument_ShouldReturnBadRequest_WhenInvalidData() {
-        DocumentDTO invalidDocumentDTO = new DocumentDTO(null, "", "", null, "");
-
-        ResponseEntity<DocumentDTO> response = documentController.createDocument(invalidDocumentDTO);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
 }
+

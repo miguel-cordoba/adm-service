@@ -2,6 +2,7 @@ package com.miguelcordoba.admservice.api;
 
 import com.miguelcordoba.admservice.dto.AuthorDTO;
 import com.miguelcordoba.admservice.service.AuthorService;
+import com.miguelcordoba.admservice.service.AuthorServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,10 +21,10 @@ import java.util.Optional;
 @Validated
 public class AuthorController {
 
-    private final AuthorService authorService;
+    private final AuthorServiceImpl authorService;
 
     @Autowired
-    public AuthorController(AuthorService authorService) {
+    public AuthorController(AuthorServiceImpl authorService) {
         this.authorService = authorService;
     }
 

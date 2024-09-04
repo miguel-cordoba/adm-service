@@ -2,6 +2,7 @@ package com.miguelcordoba.admservice.api;
 
 import com.miguelcordoba.admservice.dto.AuthorDTO;
 import com.miguelcordoba.admservice.service.AuthorService;
+import com.miguelcordoba.admservice.service.AuthorServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.when;
 class AuthorControllerTest {
 
     @Mock
-    private AuthorService authorService;
+    private AuthorServiceImpl authorService;
 
     @InjectMocks
     private AuthorController authorController;
@@ -100,24 +101,6 @@ class AuthorControllerTest {
 
         ResponseEntity<Void> failedDelete = authorController.deleteAuthor(1L);
         assertThat(failedDelete.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
-
-    //@Test
-    void createAuthor_ShouldReturnBadRequest_WhenInvalidData() {
-        AuthorDTO invalidAuthorDTO = new AuthorDTO(null, "", "");
-
-        ResponseEntity<AuthorDTO> response = authorController.createAuthor(invalidAuthorDTO);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    //@Test
-    void updateAuthor_ShouldReturnBadRequest_WhenInvalidData() {
-        AuthorDTO invalidAuthorDTO = new AuthorDTO(null, "", "");
-
-        ResponseEntity<AuthorDTO> response = authorController.updateAuthor(1L, invalidAuthorDTO);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
 }

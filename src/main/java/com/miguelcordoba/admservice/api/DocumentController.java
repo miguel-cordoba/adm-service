@@ -51,11 +51,11 @@ public class DocumentController {
     @Operation(summary = "Create a new document")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Document successfully created"),
-            @ApiResponse(responseCode = "400", description = "Bad Request. Check input fields")
+            @ApiResponse(responseCode = "400", description = "Bad Request. No empty fields allowed")
 
     })
     @PostMapping
-    public ResponseEntity<DocumentDTO> createDocument(@RequestBody @Valid DocumentDTO documentDTO) {
+    public ResponseEntity<DocumentDTO> createDocument(@Valid @RequestBody DocumentDTO documentDTO) {
         DocumentDTO savedDocument = documentService.createDocument(documentDTO);
         return new ResponseEntity<>(savedDocument, HttpStatus.CREATED);
     }
@@ -64,10 +64,10 @@ public class DocumentController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully updated the document"),
             @ApiResponse(responseCode = "404", description = "Document not found"),
-            @ApiResponse(responseCode = "400", description = "Bad Request. Check input fields")
+            @ApiResponse(responseCode = "400", description = "Bad Request. No empty fields allowed")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<DocumentDTO> updateDocument(@PathVariable @NotNull Long id, @RequestBody @Valid DocumentDTO documentDTO) {
+    public ResponseEntity<DocumentDTO> updateDocument(@PathVariable @NotNull Long id, @Valid @RequestBody DocumentDTO documentDTO) {
         Optional<DocumentDTO> updatedDocument = documentService.updateDocument(id, documentDTO);
         return updatedDocument.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
