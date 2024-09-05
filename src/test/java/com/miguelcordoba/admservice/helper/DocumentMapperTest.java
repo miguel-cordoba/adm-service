@@ -69,7 +69,7 @@ public class DocumentMapperTest {
         assertThat(document.getAuthors().size()).isEqualTo(2);
         assertTrue(firstNames.containsAll(Set.of("Jane", "John")));
         assertTrue(lastNames.containsAll(Set.of("Doe", "Smith")));
-        assertThat(document.getReferences()).isEqualTo("References");
+        assertThat(document.getReferenceText()).isEqualTo("References");
     }
 }
 

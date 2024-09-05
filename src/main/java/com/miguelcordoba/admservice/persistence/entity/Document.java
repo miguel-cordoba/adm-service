@@ -18,10 +18,15 @@ public class Document {
     private String title;
     @Column(name = "body")
     private String body;
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "documents_authors",
+            joinColumns = @JoinColumn(name = "document_id"),
+            inverseJoinColumns = @JoinColumn(name = "authors_id")
+    )
     private Set<Author> authors;
-    @Column(name = "references")
-    private String references;
+    @Column(name = "reference_text")
+    private String referenceText;
 
     public Document() { //we need both constructors for JPA and our custom entity mapping
     }
@@ -38,8 +43,8 @@ public class Document {
         this.authors = authors;
     }
 
-    public void setReferences(String references) {
-        this.references = references;
+    public void setReferenceText(String referenceText) {
+        this.referenceText = referenceText;
     }
 
 

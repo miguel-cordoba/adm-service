@@ -3,6 +3,7 @@ package com.miguelcordoba.admservice.service;
 import com.miguelcordoba.admservice.dto.DocumentDTO;
 import com.miguelcordoba.admservice.helper.AuthorMapper;
 import com.miguelcordoba.admservice.helper.DocumentMapper;
+import com.miguelcordoba.admservice.kafka.DocumentProducer;
 import com.miguelcordoba.admservice.persistence.entity.Document;
 import com.miguelcordoba.admservice.persistence.repository.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final DocumentProducer documentProducer;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository) {
+    public DocumentServiceImpl(DocumentRepository documentRepository, DocumentProducer documentProducer) {
         this.documentRepository = documentRepository;
+        this.documentProducer = documentProducer;
     }
 
     @Override
@@ -47,14 +50,17 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Optional<DocumentDTO> updateDocument(Long id, DocumentDTO documentDTO) {
-        return documentRepository.findById(id)
+        Optional<DocumentDTO> updatedDocument =  documentRepository.findById(id)
                 .map(existingDoc -> {
                     existingDoc.setBody(documentDTO.body());
                     existingDoc.setAuthors(AuthorMapper.mapDTOSetToEntitySet(documentDTO.authors()));
-                    existingDoc.setReferences(documentDTO.references());
+                    existingDoc.setReferenceText(documentDTO.references());
                     return documentRepository.save(existingDoc);
                 })
                 .map(DocumentMapper::mapToDTO);
+        documentProducer.sendMessage(documentDTO.id().toString());
+
+        return updatedDocument;
     }
 
     @Override

@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "authors")
 @Getter
-@AllArgsConstructor
 public class Author {
 
     @Id
@@ -17,9 +19,17 @@ public class Author {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-
+    @ManyToMany(mappedBy = "authors")
+    Set<Document> documents;
     public Author() {//we need both constructors for JPA and our custom entity mapping
     }
+
+    public Author(Long id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

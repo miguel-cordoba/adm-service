@@ -14,7 +14,7 @@ public class DocumentMapper {
                 document.getTitle(),
                 document.getBody(),
                 document.getAuthors().stream().map(AuthorMapper::mapToDTO).collect(Collectors.toSet()),
-                document.getReferences()
+                document.getReferenceText()
         );
     }
 

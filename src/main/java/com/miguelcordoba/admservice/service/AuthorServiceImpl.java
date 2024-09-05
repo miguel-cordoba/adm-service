@@ -2,6 +2,7 @@ package com.miguelcordoba.admservice.service;
 
 import com.miguelcordoba.admservice.dto.AuthorDTO;
 import com.miguelcordoba.admservice.helper.AuthorMapper;
+import com.miguelcordoba.admservice.kafka.AuthorProducer;
 import com.miguelcordoba.admservice.persistence.entity.Author;
 import com.miguelcordoba.admservice.persistence.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,13 @@ import java.util.stream.Collectors;
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final AuthorProducer authorProducer;
 
     @Autowired
-    public AuthorServiceImpl(AuthorRepository authorRepository) {
+    public AuthorServiceImpl(AuthorRepository authorRepository,
+                             AuthorProducer authorProducer) {
         this.authorRepository = authorRepository;
+        this.authorProducer = authorProducer;
     }
 
     @Override
@@ -42,13 +46,17 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Optional<AuthorDTO> updateAuthor(Long id, AuthorDTO authorDTO) {
-        return authorRepository.findById(id)
+        Optional<AuthorDTO> updatedAuthor =  authorRepository.findById(id)
                 .map(existingAuthor -> {
                     existingAuthor.setFirstName(authorDTO.firstName());
                     existingAuthor.setLastName(authorDTO.lastName());
                     return authorRepository.save(existingAuthor);
                 })
                 .map(AuthorMapper::mapToDTO);
+        //any updates will result in deletion triggered by this queue
+        authorProducer.sendMessage(authorDTO.id().toString());
+
+        return updatedAuthor;
     }
 
     @Override
@@ -58,5 +66,9 @@ public class AuthorServiceImpl implements AuthorService {
             return true;
         }
         return false;
+    }
+
+    public void deleteAuthorAndRelatedDocuments(Long authorId) {
+        authorProducer.sendMessage(authorId.toString());
     }
 }

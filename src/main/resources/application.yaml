@@ -14,7 +14,7 @@ logging:
   level:
     org:
       springframework:
-        security: DEBUG
+        kafka: DEBUG
 
 springdoc:
   api-docs:
@@ -24,27 +24,48 @@ springdoc:
     path: /swagger-ui.html
 
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    group-id: adms-group
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      group-id: adm-service
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+
   security:
     user:
       name: admin
       password: admin
 
   datasource:
-    url: jdbc:h2:mem:admservice
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
-
-  h2:
-    console:
-      path: /h2-console
-      enabled: true
+    url: jdbc:postgresql://localhost:5432/admservice
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
-      show-sql: true
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+
+  #datasource:
+   # url: jdbc:h2:mem:admservice
+    #username: sa
+    #password:
+    #driverClassName: org.h2.Driver
+
+  #h2:
+   # console:
+    #  path: /h2-console
+     # enabled: true
 
   sql:
     init:
