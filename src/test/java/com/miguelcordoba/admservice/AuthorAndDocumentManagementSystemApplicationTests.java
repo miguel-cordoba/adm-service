@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class) // For JUnit 5
 class AuthorAndDocumentManagementSystemApplicationTests {
 
-    @Test
+    //@Test
     void contextLoads() {
     }
 

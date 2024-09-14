@@ -25,8 +25,9 @@ springdoc:
 
 spring:
   kafka:
+    broker:
+      id: 1
     bootstrap-servers: localhost:9092
-    group-id: adms-group
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -36,6 +37,9 @@ spring:
       group-id: adm-service
       auto-offset-reset: earliest
       enable-auto-commit: true
+    listener:
+      missing-topics-fatal: false
+      plain-text: PLAINTEXT://0.0.0.0:9092
 
   security:
     user:
